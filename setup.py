@@ -40,12 +40,12 @@ extra_compile_args = ['-D_CRT_SECURE_NO_WARNINGS']
 extra_link_args = []
 
 # Not all CPUs have march as a tuning parameter
-cputune = ['-march=native',]
 if platform.machine() == 'ppc64le':
     extra_compile_args += ['-mcpu=native',]
 
-if platform.machine() == 'x86_64':
-    extra_compile_args += cputune
+# Apple LLVM Clang does not have support for -march=native
+if platform.machine() == 'x86_64' and platform.system() != 'Darwin':
+    extra_compile_args += ['-march=native',]
 
 if os.name != 'nt':
     extra_compile_args += ['-O3', '-ffast-math', '-fno-associative-math']
